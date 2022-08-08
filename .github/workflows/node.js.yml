@@ -5,20 +5,20 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "reference" ]
+    branches: ["reference"]
   pull_request:
-    branches: [ "reference" ]
+    branches: ["reference"]
 
-# jobs:
-#   build:
-#     needs: setup
-#     runs-on: ubuntu-latest
-#     steps:
-#       -run: ./build_server.sh
-#     strategy:
-#       matrix:
-#         node-version: [12.x, 14.x, 16.x]
-#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  # jobs:
+  #   build:
+  #     needs: setup
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       -run: ./build_server.sh
+  #     strategy:
+  #       matrix:
+  #         node-version: [12.x, 14.x, 16.x]
+  #         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
   jobs:
   setup:
     runs-on: ubuntu-latest
@@ -32,16 +32,14 @@ on:
   test:
     needs: build
     runs-on: ubuntu-latest
-    steps:
-      - run: ./test_server.sh
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
