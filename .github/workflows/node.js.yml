@@ -9,15 +9,31 @@ on:
   pull_request:
     branches: [ "reference" ]
 
-jobs:
-  build:
-
+# jobs:
+#   build:
+#     needs: setup
+#     runs-on: ubuntu-latest
+#     steps:
+#       -run: ./build_server.sh
+#     strategy:
+#       matrix:
+#         node-version: [12.x, 14.x, 16.x]
+#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  jobs:
+  setup:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+      - run: ./setup_server.sh
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./build_server.sh
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./test_server.sh
 
     steps:
     - uses: actions/checkout@v3
